@@ -29,6 +29,8 @@ on:
 jobs:
   jules-invoke:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Invoke Jules
         uses: BeksOmega/jules-action@v1
@@ -36,6 +38,8 @@ jobs:
           prompt: ${{ github.event.inputs.prompt }}
           jules_api_key: ${{ secrets.JULES_API_KEY }}
 ```
+
+**Note on permissions:** This action requires the `contents: read` permission to be able to check out the repository. This is especially important for private repositories.
 
 ## Inputs
 
