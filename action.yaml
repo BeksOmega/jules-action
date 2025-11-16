@@ -1,4 +1,9 @@
 name: Jules Invoke
+description: 'Invoke Jules, an AI-powered coding agent, to perform tasks on your codebase.'
+
+branding:
+  icon: 'code'
+  color: 'purple'
 
 on:
   workflow_call:
