@@ -25,14 +25,13 @@ on:
       prompt:
         description: 'The prompt for Jules'
         required: true
-        default: 'Refactor the main function to improve readability.'
 
 jobs:
   jules-invoke:
     runs-on: ubuntu-latest
     steps:
       - name: Invoke Jules
-        uses: jules-project/jules-invoke-action@v1
+        uses: BeksOmega/jules-action@v1
         with:
           prompt: ${{ github.event.inputs.prompt }}
           jules_api_key: ${{ secrets.JULES_API_KEY }}
@@ -50,7 +49,7 @@ jobs:
 
 ## Attribution
 
-If you find this action useful, we'd appreciate it if you added the "Built with Jules" shield to your `README.md`:
+If you find this action useful, spread the word by adding the "Built with Jules" shield to your `README.md`:
 
 ```markdown
 [![Built with Jules](https://img.shields.io/badge/Built%20with-Jules-715cd7?link=https://jules.google)](https://jules.google)
