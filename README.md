@@ -29,6 +29,8 @@ on:
 jobs:
   jules-invoke:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Invoke Jules
         uses: BeksOmega/jules-action@v1
@@ -37,15 +39,18 @@ jobs:
           jules_api_key: ${{ secrets.JULES_API_KEY }}
 ```
 
+**Note on permissions:** This action requires the `contents: read` permission to be able to check out the repository. This is especially important for private repositories.
+
 ## Inputs
 
-| Input                 | Description                                                                                             | Default   |
-| --------------------- | ------------------------------------------------------------------------------------------------------- | --------- |
-| `prompt`              | **Required.** The prompt to pass to Jules.                                                              | `''`      |
-| `jules_api_key`       | **Required.** Your Jules API key. Store this as a secret in your repository settings.                     | `''`      |
-| `include_last_commit` | Whether to pass the content of the last commit to Jules.                                                | `false`   |
-| `include_commit_log`  | Whether to pass the commit history to Jules.                                                            | `false`   |
-| `starting_branch`     | The branch for Jules to start from.                                                                     | `'main'`  |
+| Input                 | Description                                                                                             | Default            |
+| --------------------- | ------------------------------------------------------------------------------------------------------- | ------------------ |
+| `prompt`              | **Required.** The prompt to pass to Jules.                                                              | `''`               |
+| `jules_api_key`       | **Required.** Your Jules API key. Store this as a secret in your repository settings.                     | `''`               |
+| `include_last_commit` | Whether to pass the content of the last commit to Jules.                                                | `false`            |
+| `include_commit_log`  | Whether to pass the commit history to Jules.                                                            | `false`            |
+| `starting_branch`     | The branch for Jules to start from.                                                                     | `'main'`           |
+| `github_token`        | The GitHub token to use for checking out the repository.                                                  | `${{ github.token }}` |
 
 ## Attribution
 
