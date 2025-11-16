@@ -25,6 +25,10 @@ on:
         required: false
         type: string
         default: 'main'
+      jules_api_key:
+        description: 'The Jules API key to use for authentication'
+        required: true
+        type: string
 
 jobs:
   invoke-jules:
@@ -75,5 +79,5 @@ jobs:
           curl 'https://jules.googleapis.com/v1alpha/sessions' \
             -X POST \
             -H "Content-Type: application/json" \
-            -H "X-Goog-Api-Key: ${{ secrets.JULES_API_KEY }}" \
+            -H "X-Goog-Api-Key: ${{ inputs.jules_api_key }}" \
             -d @jules_payload.json
