@@ -1,0 +1,74 @@
+name: Jules Invoke
+
+on:
+  workflow_call:
+    inputs:
+      prompt:
+        description: 'The prompt to pass to Jules'
+        required: true
+        type: string
+      include_last_commit:
+        description: 'Whether to pass content of the last commit'
+        type: boolean
+        default: false
+      include_commit_log:
+        description: 'Whether to pass commit history'
+        type: boolean
+        default: false
+      starting_branch:
+        description: 'The branch for Jules to start from'
+        required: false
+        type: string
+        default: 'main'
+
+jobs:
+  invoke-jules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 30
+
+      - name: Create initial prompt
+        env:
+          USER_PROMPT: ${{ inputs.prompt }}
+        run: |
+          echo "$USER_PROMPT" > prompt.txt
+
+      - name: Save last commit content
+        if: ${{ inputs.include_last_commit }}
+        run: |
+          echo -e '\n\nContent of the latest commit (in the format of `git show`):' >> prompt.txt
+          echo '```' >> prompt.txt
+          git show   >> prompt.txt
+          echo '```' >> prompt.txt
+
+      - name: Save git log
+        if: ${{ inputs.include_commit_log }}
+        run: |
+          echo -e '\n\nLog of the last 20 commits (in the format of `git log --stat`):' >> prompt.txt
+          echo '```'         >> prompt.txt
+          git log -20 --stat >> prompt.txt
+          echo '```'         >> prompt.txt
+
+      - name: Assemble Jules payload
+        run: |
+          jq -n --arg jules_prompt "$(cat prompt.txt)" --arg starting_branch "${{ inputs.starting_branch }}" --arg repo_full_name "${{ github.repository }}" '{
+              "prompt": $jules_prompt,
+              "sourceContext": {
+                "source": "sources/github/\($repo_full_name)",
+                "githubRepoContext": {
+                  "startingBranch": $starting_branch
+                }
+              },
+              "requirePlanApproval": false,
+              "automationMode": "AUTO_CREATE_PR"
+            }' > jules_payload.json
+
+      - name: Invoke Jules
+        run: |
+          curl 'https://jules.googleapis.com/v1alpha/sessions' \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Goog-Api-Key: ${{ secrets.JULES_API_KEY }}" \
+            -d @jules_payload.json
