@@ -14,7 +14,11 @@ Before using this action, you must have:
 
 ## Usage
 
-Here's an example of how to use the Jules Invoke action in your workflow:
+Here's an example of how to use the Jules Invoke action in your workflow.
+
+### Working with Private Repositories
+
+To allow the action to check out a private repository, you must grant it `contents: read` permission in your workflow. The default `${{ github.token }}` passed to the action will then have the necessary scope to access the repository.
 
 ```yaml
 name: Invoke Jules
@@ -29,6 +33,8 @@ on:
 jobs:
   jules-invoke:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Required to checkout private repositories
     steps:
       - name: Invoke Jules
         uses: BeksOmega/jules-action@v1
@@ -43,7 +49,7 @@ jobs:
 | --------------------- | ------------------------------------------------------------------------------------------------------- | --------- |
 | `prompt`              | **Required.** The prompt to pass to Jules.                                                              | `''`      |
 | `jules_api_key`       | **Required.** Your Jules API key. Store this as a secret in your repository settings.                     | `''`      |
-| `github_token`        | The GitHub token to use for authentication. Required for private repositories.                          | `${{ github.token }}` |
+| `github_token`        | The GitHub token for checking out the repository. The default token is usually sufficient.              | `${{ github.token }}` |
 | `include_last_commit` | Whether to pass the content of the last commit to Jules.                                                | `false`   |
 | `include_commit_log`  | Whether to pass the commit history to Jules.                                                            | `false`   |
 | `starting_branch`     | The branch for Jules to start from.                                                                     | `'main'`  |
