@@ -27,6 +27,11 @@ inputs:
     description: 'The Jules API key to use for authentication'
     required: true
     type: string
+  github_token:
+    description: 'The GitHub token to use for authentication'
+    required: false
+    type: string
+    default: ${{ github.token }}
 
 runs:
   using: "composite"
@@ -34,6 +39,7 @@ runs:
     - uses: actions/checkout@v5
       with:
         fetch-depth: 30
+        token: ${{ inputs.github_token }}
 
     - name: Create initial prompt
       env:
