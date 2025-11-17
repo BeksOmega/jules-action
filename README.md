@@ -104,9 +104,9 @@ jobs:
           jules_api_key: ${{ secrets.JULES_API_KEY }}
 ```
 
-### Running on Chron
+### Running periodically
 
-You can also run workflows periodically, such as to do general code clean-up. (Note: This prompt is just an example, it hasn't been thoroughly tested)
+You can also run workflows on a cron, such as to do general code clean-up. (Note: This prompt is just an example, it hasn't been thoroughly tested)
 
 ```
 name: Cleanup
