@@ -73,7 +73,7 @@ jobs:
     steps:
       - name: Find Unblocked Issues
         id: finder
-        uses: BeksOmega/on-unblocked@v0.1.1
+        uses: BeksOmega/on-unblocked@v1.0.0
 
   invoke-jules:
     needs: detect-unblocked
@@ -98,7 +98,7 @@ jobs:
             });
             return issue.data;
       - name: Invoke Jules on Unblocked Issue
-        uses: BeksOmega/jules-action@v0.1.2
+        uses: BeksOmega/jules-action@v1.0.0
         with:
           prompt: "${{ fromJson(steps.get_issue.outputs.result).title }}. ${{ fromJson(steps.get_issue.outputs.result).body }}"
           jules_api_key: ${{ secrets.JULES_API_KEY }}
@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Invoke Jules for Cleanup
-        uses: BeksOmega/jules-action@v0.1.2
+        uses: BeksOmega/jules-action@v1.0.0
         with:
           prompt: |
             Please analyze the codebase for potential areas of improvement. Specifically, I'd like you to focus on the following code smells:
